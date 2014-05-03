@@ -1,0 +1,3 @@
+#!/bin/bash
+set -x
+gcc -std=c99 -pedantic -Wall -W -Wextra -Werror -c $@

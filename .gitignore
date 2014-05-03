@@ -1,0 +1,3 @@
+*.o
+lextab.py
+yacctab.py
