@@ -9,12 +9,14 @@ BSD
 
 # Identifier groups with example
 
-  Lower             abcd
-  Upper             ABCD
-  LowerUnderscore   ab_cd, ab_cd_
-  UpperUnderscore   AB_CD
-  Camel             abAb, AbAb
-  Mixed             ab_AB
+    Group name        Example
+    -------------------------------------
+    Lower             abcd
+    Upper             ABCD
+    LowerUnderscore   ab_cd, ab_cd_
+    UpperUnderscore   AB_CD
+    Camel             abAb, AbAb
+    Mixed             ab_AB
 
 # Usage example
 
