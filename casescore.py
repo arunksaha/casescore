@@ -12,8 +12,10 @@
 from __future__ import print_function
 from enum import Enum
 from pprint import pprint
+from subprocess import call
 import collections
 import sys
+import subprocess
 
 sys.path.append( './external/pycparser' )
 try:
@@ -26,6 +28,9 @@ __version__ = '0.01'
 
 # Portable cpp path for Windows and Linux/Unix
 CPPPATH = '../utils/cpp.exe' if sys.platform == 'win32' else 'cpp'
+
+# C Compiler
+CC = 'gcc'
 
 # Enum/Class to model string classification, see utstrclass
 class Case( Enum ):
@@ -106,15 +111,19 @@ class IdVisitor(c_ast.NodeVisitor):
         self.idDict_[ node.name ] += 1
 
 def idDefs(filename):
+    tmpFilename = filename + '.tmp'
+    command = [CC, '-nostdinc', '-E', '-I',
+        'external/pycparser/utils/fake_libc_include/', filename]
+    with open(tmpFilename, 'w') as myoutfile:
+        subprocess.call(command, stdout=myoutfile)
     ast = parse_file(
-        filename,
+        tmpFilename,
         use_cpp=True,
         cpp_path=CPPPATH, 
-        # c.f. http://stackoverflow.com/questions/10353902/
-        cpp_args=[ "-nostdinc" ]
     )
     v = IdVisitor()
     v.visit(ast)
+    call(["rm", "-f", tmpFilename])
     return v.idDict_
 
 # For each (id, freq), find the case-class of id and
@@ -122,7 +131,7 @@ def idDefs(filename):
 def fileclassify( filename ):
     idFreqClassList = []
     idDict = idDefs( filename )
-    for item in idDict.iteritems():
+    for item in idDict.items():
         idClass = strclass( item[ 0 ] )
         idFreqClassList.append( (item[ 0 ], item[ 1 ], idClass) )
     return idFreqClassList
@@ -155,7 +164,7 @@ def printByClass( classFreqDict ):
     printline( 80 )
     print( "%16s%10s" % ("case", "frequency") )
     printline( 80 )
-    for item in classFreqDict.iteritems():
+    for item in classFreqDict.items():
         itemcasename = casename( item[ 0 ] )
         itemfreq = item[ 1 ]
         print( "%16s%10d" % (itemcasename, itemfreq) )

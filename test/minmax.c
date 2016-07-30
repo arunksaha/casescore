@@ -14,7 +14,6 @@ int max( int a, int b ) {
 int minrange( int const * ARR, int const arr_Length ) {
     int i = 0;
     int cur_min = INT_MAX;
-    // int cur_min = 65535;
     for( i = 0; i != arr_Length; ++i ) {
         int const newMin = min( cur_min, ARR[ i ] );
         cur_min = newMin < cur_min ? newMin : cur_min;
@@ -25,6 +24,4 @@ int minrange( int const * ARR, int const arr_Length ) {
 void printmin( int a, int b ) {
     (void) a;
     (void) b;
-    // printf( "The min of '%d' and '%d' is '%d'\n",
-    //     a, b, min( a, b ) );
 }
